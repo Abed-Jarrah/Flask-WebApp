@@ -30,7 +30,7 @@ def index():
         if conn:
             try:
                 cursor = conn.cursor()
-                query = "INSERT INTO dbo.Table (EmpNumber, TrainingID, Date) VALUES (?, ?, ?)"
+                query = "INSERT INTO dbo.[Table] (EmpNumber, TrainingID, Date) VALUES (?, ?, ?)"
                 cursor.execute(query, (emp_number, training_id, date))
                 conn.commit()
                 return render_template('success.html')
