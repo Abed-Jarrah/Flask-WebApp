@@ -30,7 +30,7 @@ def index():
 
         # Insert data into the database
         cursor = conn.cursor()
-        query = "INSERT INTO dbo.[Table] (EmpNumber, TrainingID, [Date]) VALUES (?, ?, ?)"
+        query = "INSERT INTO [dbo].[Table] (EmpNumber, TrainingID, [Date]) VALUES (?, ?, ?)"
 
         cursor.execute(query, emp_number, training_id, current_date)
         conn.commit()
