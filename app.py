@@ -1,48 +1,44 @@
 from flask import Flask, render_template, request
 import pyodbc
-from datetime import date
 
 app = Flask(__name__)
 
-# Establish connection to Azure database
-server = 'bfisql.database.windows.net'
-database = 'HRList'
-username = 'abed'
-password = 'P@$$w0rd.123'
-driver = '{ODBC Driver 18 for SQL Server}'  # Use the appropriate driver
+# Replace the connection string with your Azure SQL Database connection string
+conn_str = "Driver={ODBC Driver 18 for SQL Server};Server=tcp:bfisql.database.windows.net,1433;Database=HRList;Uid=abed;Pwd=P@$$w0rd.123;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;"
 
 def get_database_connection():
-    conn = pyodbc.connect(
-        f'DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}'
-    )
-    return conn
+    try:
+        conn = pyodbc.connect(conn_str)
+        return conn
+    except pyodbc.Error as e:
+        app.logger.error("Error connecting to the database: %s", e)
+        return None
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        # Retrieve form data
         emp_number = request.form['emp_number']
         training_id = request.form['training_id']
-        current_date = date.today().strftime('%Y-%m-%d')
-
-        # Establish connection to Azure database
+        date = request.form['date']
+        
         conn = get_database_connection()
-
-        # Insert data into the database
-        cursor = conn.cursor()
-        query = "INSERT INTO [dbo].[Table] (EmpNumber, TrainingID, [Date]) VALUES (?, ?, ?)"
-
-        cursor.execute(query, emp_number, training_id, current_date)
-        conn.commit()
-
-        # Close the database connection
-        cursor.close()
-        conn.close()
-
-        # Redirect or render a success page
-        return render_template('success.html')
-
-    # If it's a GET request, render the index.html template
+        
+        if conn:
+            try:
+                cursor = conn.cursor()
+                query = "INSERT INTO dbo.Table (EmpNumber, TrainingID, Date) VALUES (?, ?, ?)"
+                cursor.execute(query, (emp_number, training_id, date))
+                conn.commit()
+                return render_template('success.html')
+            except pyodbc.Error as e:
+                app.logger.error("Error executing SQL query: %s", e)
+                return render_template('error.html')
+            finally:
+                cursor.close()
+                conn.close()
+        else:
+            return render_template('error.html')
+    
     return render_template('index.html')
 
 if __name__ == '__main__':
