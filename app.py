@@ -1,10 +1,14 @@
 from flask import Flask, render_template, request
 import pyodbc
+import os
 
 app = Flask(__name__)
 
+# Retrieve the ODBC driver from the application settings
+odbc_driver = os.environ.get('ODBC_DRIVER', 'ODBC Driver 18 for SQL Server')
+
 # Replace the connection string with your Azure SQL Database connection string
-conn_str = "Driver={ODBC Driver 18 for SQL Server};Server=tcp:bfisql.database.windows.net,1433;Database=HRList;Uid=abed;Pwd=P@$$w0rd.123;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;"
+conn_str = f"Driver={odbc_driver};Server=tcp:bfisql.database.windows.net,1433;Database=HRList;Uid=abed;Pwd=P@$$w0rd.123;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;"
 
 def get_database_connection():
     try:
