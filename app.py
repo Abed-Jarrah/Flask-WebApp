@@ -17,28 +17,32 @@ def get_database_connection():
     )
     return conn
 
-@app.route('/submit', methods=['POST'])
-def submit_form():
-    # Retrieve form data
-    emp_number = request.form['emp_number']
-    training_id = request.form['training_id']
-    current_date = date.today().strftime('%Y-%m-%d')
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        # Retrieve form data
+        emp_number = request.form['emp_number']
+        training_id = request.form['training_id']
+        current_date = date.today().strftime('%Y-%m-%d')
 
-    # Establish connection to Azure database
-    conn = get_database_connection()
+        # Establish connection to Azure database
+        conn = get_database_connection()
 
-    # Insert data into the database
-    cursor = conn.cursor()
-    query = "INSERT INTO YourTable (EmpNumber, TrainingID, Date) VALUES (?, ?, ?)"
+        # Insert data into the database
+        cursor = conn.cursor()
+        query = "INSERT INTO YourTable (EmpNumber, TrainingID, Date) VALUES (?, ?, ?)"
 
-    cursor.execute(query, emp_number, training_id, current_date)
-    conn.commit()
+        cursor.execute(query, emp_number, training_id, current_date)
+        conn.commit()
 
-    # Close the database connection
-    cursor.close()
-    conn.close()
+        # Close the database connection
+        cursor.close()
+        conn.close()
 
-    # Redirect or render a success page
+        # Redirect or render a success page
+        return render_template('success.html')
+
+    # If it's a GET request, render the index.html template
     return render_template('index.html')
 
 if __name__ == '__main__':
