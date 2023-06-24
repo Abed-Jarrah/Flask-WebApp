@@ -84,5 +84,10 @@
             <input type="submit" value="Submit">
         </form>
     </div>
+    <script>
+        // Set the current date as the default value for the "Date" field
+        var currentDate = new Date().toISOString().split('T')[0];
+        document.getElementById("date").value = currentDate;
+    </script>
 </body>
 </html>
