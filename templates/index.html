@@ -4,6 +4,10 @@
     <title>Training Form</title>
     <style>
         body {
+            background-image: url("p3.jpg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -57,12 +61,6 @@
             cursor: pointer;
         }
     </style>
-    <script>
-        window.onload = function() {
-            var currentDate = new Date().toISOString().split('T')[0];
-            document.getElementById('date').value = currentDate;
-        };
-    </script>
 </head>
 <body>
     <div class="container">
