@@ -2,7 +2,7 @@ from flask import Flask, render_template, request
 import pyodbc
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 
 # Retrieve the ODBC driver from the application settings
 odbc_driver = os.environ.get('ODBC_DRIVER', 'ODBC Driver 18 for SQL Server')
