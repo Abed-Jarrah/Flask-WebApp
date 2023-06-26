@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'bfi'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B050DD6644724840A4F9E0E392692D07 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9D9FB5F3DBA442818EC61FE5BC329416 }}
